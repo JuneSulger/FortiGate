@@ -1,0 +1,594 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>FortiGate — Guide des menus &amp; usages</title>
+<meta name="description" content="Guide de référence complet sur l'interface FortiGate (FortiOS) : dashboard, réseau, policies, sécurité, VPN, identité, WiFi, Security Fabric, système et logs.">
+<style>
+  :root{
+    color-scheme: dark;
+    --bg:#141312;
+    --bg-2:#1a1817;
+    --surface:#201e1d;
+    --surface-alt:#282523;
+    --ink:#f5f3f1;
+    --ink-soft:#bdb6b0;
+    --ink-faint:#8a827c;
+    --accent:#ff4438;
+    --accent-2:#b5251a;
+    --accent-ink:#ff8378;
+    --accent-soft:rgba(255,68,56,.14);
+    --warn:#ffb457;
+    --warn-soft:rgba(255,180,87,.13);
+    --line:rgba(255,240,235,.13);
+    --line-soft:rgba(255,240,235,.07);
+    --brand-gradient: linear-gradient(120deg, #ff8a3d 0%, #ff4438 55%, #b5251a 100%);
+    --shadow: 0 1px 2px rgba(0,0,0,.5), 0 0 0 1px rgba(255,240,235,.04), 0 14px 34px -18px rgba(255,68,56,.4);
+    --glow: 0 0 24px -4px rgba(255,68,56,.55);
+  }
+
+  *{box-sizing:border-box;}
+  html{-webkit-text-size-adjust:100%;}
+  body{
+    margin:0;
+    background:
+      radial-gradient(1100px 560px at 12% -8%, rgba(255,68,56,.14), transparent 60%),
+      radial-gradient(900px 500px at 90% 6%, rgba(255,138,61,.08), transparent 55%),
+      var(--bg);
+    color:var(--ink);
+    font-family:"Segoe UI",system-ui,-apple-system,"Helvetica Neue",Arial,sans-serif;
+    font-size:17px;
+    line-height:1.65;
+  }
+  ::selection{ background:var(--accent-soft); color:var(--accent-ink); }
+
+  h1,h2,h3{
+    font-family:"Segoe UI Semibold","Segoe UI",system-ui,-apple-system,sans-serif;
+    font-weight:600;
+    letter-spacing:-.01em;
+    text-wrap:balance;
+    color:var(--ink);
+    margin:0;
+  }
+  .mono{ font-family:ui-monospace,"Cascadia Code",Consolas,"SFMono-Regular",monospace; }
+  .eyebrow{
+    font-family:ui-monospace,"Cascadia Code",Consolas,monospace;
+    font-size:.72rem;
+    letter-spacing:.11em;
+    text-transform:uppercase;
+    color:var(--accent);
+    font-weight:600;
+  }
+  a{ color:var(--accent-ink); }
+  a:focus-visible, button:focus-visible, .toc a:focus-visible{
+    outline:2px solid var(--accent); outline-offset:2px; border-radius:3px;
+  }
+
+  .brand-strip{ height:3px; background:var(--brand-gradient); }
+
+  .masthead{
+    border-bottom:1px solid var(--line);
+    background:linear-gradient(180deg, var(--bg-2), var(--bg));
+    position:relative; overflow:hidden;
+  }
+  .masthead::after{
+    content:"";
+    position:absolute; top:-140px; right:-120px;
+    width:420px; height:420px; border-radius:50%;
+    background:radial-gradient(circle, rgba(255,68,56,.18), transparent 68%);
+    pointer-events:none;
+  }
+  .masthead-inner{ max-width:1180px; margin:0 auto; padding:3.4rem 2rem 2.6rem; position:relative; }
+  .brand-mark{
+    width:32px; height:32px;
+    background:var(--brand-gradient);
+    clip-path:polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+    box-shadow:var(--glow);
+    margin-bottom:1.1rem;
+  }
+  .masthead h1{ font-size:clamp(2.1rem, 4vw, 3.1rem); line-height:1.05; margin-top:.6rem; }
+  .masthead .lede{ max-width:62ch; color:var(--ink-soft); font-size:1.08rem; margin-top:1.1rem; }
+  .fact-strip{ display:flex; flex-wrap:wrap; gap:.6rem 1.4rem; margin-top:1.8rem; }
+  .fact{
+    font-family:ui-monospace,"Cascadia Code",Consolas,monospace;
+    font-size:.78rem; color:var(--ink-faint);
+    display:flex; align-items:baseline; gap:.4rem;
+  }
+  .fact b{ color:var(--ink-soft); font-weight:600; }
+
+  .layout{
+    max-width:1180px; margin:0 auto;
+    display:grid; grid-template-columns:220px minmax(0,1fr);
+    gap:3.2rem; padding:2.6rem 2rem 5rem; align-items:start;
+  }
+  nav.toc{
+    position:sticky; top:1.6rem;
+    display:flex; flex-direction:column; gap:1.4rem;
+    font-family:ui-monospace,"Cascadia Code",Consolas,monospace;
+    font-size:.8rem;
+  }
+  .toc .group-label{ color:var(--ink-faint); letter-spacing:.08em; text-transform:uppercase; font-size:.68rem; margin-bottom:.5rem; }
+  .toc ul{ list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:.45rem;}
+  .toc a{
+    color:var(--ink-soft); text-decoration:none; display:block; padding:.15rem 0;
+    border-left:2px solid transparent; padding-left:.7rem;
+    transition:color .15s, border-color .15s;
+  }
+  .toc a:hover{ color:var(--accent-ink); border-color:var(--accent); }
+  .toc .domain-num{ color:var(--accent); }
+
+  main{ min-width:0; display:flex; flex-direction:column; gap:4.6rem; }
+  section{ scroll-margin-top:1.4rem; }
+
+  section > .section-head{
+    display:flex; align-items:baseline; gap:.9rem;
+    margin-bottom:1.6rem; border-bottom:1px solid var(--line); padding-bottom:1rem;
+  }
+  .domain-tag{
+    font-family:ui-monospace,"Cascadia Code",Consolas,monospace;
+    font-size:.72rem; font-weight:700; color:#2a0a06;
+    background:var(--brand-gradient);
+    padding:.28rem .6rem; border-radius:20px; white-space:nowrap;
+    box-shadow:var(--glow);
+  }
+  section h2{ font-size:1.6rem; }
+  .weight{ margin-left:auto; font-family:ui-monospace,"Cascadia Code",Consolas,monospace; font-size:.72rem; color:var(--ink-faint); white-space:nowrap; }
+
+  p{ margin:0 0 1rem; max-width:68ch; color:var(--ink); }
+  p:last-child{ margin-bottom:0; }
+  .lead-p{ color:var(--ink-soft); }
+
+  h3{ font-size:1.12rem; margin:0 0 .8rem; }
+  h4.cat{
+    font-family:ui-monospace,"Cascadia Code",Consolas,monospace;
+    font-size:.85rem; font-weight:600; color:var(--accent-ink); margin:0 0 .15rem;
+  }
+
+  .subsection{ margin-top:2.3rem; }
+  .subsection:first-of-type{ margin-top:0; }
+
+  .glossary{
+    display:grid; grid-template-columns:repeat(auto-fill, minmax(240px,1fr));
+    gap:1px; background:var(--line); border:1px solid var(--line);
+    border-radius:8px; overflow:hidden; margin-top:1rem;
+  }
+  .term{ background:var(--surface); padding:1rem 1.1rem; }
+  .term dt{ font-family:ui-monospace,"Cascadia Code",Consolas,monospace; font-weight:600; font-size:.86rem; color:var(--ink); margin-bottom:.3rem; }
+  .term dd{ margin:0; color:var(--ink-soft); font-size:.92rem; line-height:1.5; }
+
+  .cat-grid{ display:grid; grid-template-columns:repeat(auto-fit, minmax(260px,1fr)); gap:1.1rem; margin-top:1.4rem; }
+  .cat-card{
+    background:var(--surface); border:1px solid var(--line); border-radius:10px;
+    padding:1.3rem 1.4rem 1.4rem; box-shadow:var(--shadow);
+    transition:border-color .15s, transform .15s;
+  }
+  .cat-card:hover{ border-color:var(--accent); transform:translateY(-2px); }
+  .cat-card ul{ list-style:none; margin:.9rem 0 0; padding:0; display:flex; flex-direction:column; gap:.6rem; }
+  .cat-card li{ font-size:.9rem; color:var(--ink-soft); line-height:1.45; }
+  .svc-name{
+    font-family:ui-monospace,"Cascadia Code",Consolas,monospace;
+    font-size:.78rem; font-weight:600; color:var(--accent-ink);
+    background:var(--surface-alt); padding:.1rem .4rem; border-radius:4px; white-space:nowrap;
+  }
+  .cat-desc{ color:var(--ink-faint); font-size:.85rem; margin-top:.35rem; }
+  .cat-card.link-card{ display:block; text-decoration:none; color:inherit; }
+  .link-card .cat-desc{ word-break:break-all; color:var(--accent-ink); }
+  .link-card .arrow{ color:var(--accent); font-weight:700; }
+
+  .hier{ margin-top:1.4rem; display:flex; flex-direction:column; gap:.55rem; }
+  .hier-row{ display:flex; }
+  .hier-box{ border:1px solid var(--line); background:var(--surface); border-radius:8px; padding:.8rem 1.1rem; font-size:.88rem; box-shadow:var(--shadow); }
+  .hier-box b{ font-family:ui-monospace,"Cascadia Code",Consolas,monospace; font-size:.82rem; color:var(--accent-ink); display:block; margin-bottom:.15rem;}
+  .hier-l0{ width:100%; } .hier-l1{ width:92%; margin-left:4%; } .hier-l2{ width:82%; margin-left:9%; } .hier-l3{ width:70%; margin-left:15%; }
+  .hier-box span{ color:var(--ink-soft); }
+
+  .benefits-grid{ display:grid; grid-template-columns:repeat(auto-fit, minmax(280px,1fr)); gap:1.1rem; margin-top:1.4rem; }
+  .benefit-card{
+    background:var(--surface); border:1px solid var(--line); border-radius:10px;
+    padding:1.2rem 1.3rem; box-shadow:var(--shadow); display:flex; gap:1rem; align-items:flex-start;
+  }
+  .benefit-num{
+    font-family:ui-monospace,"Cascadia Code",Consolas,monospace;
+    font-variant-numeric:tabular-nums; font-size:1.05rem; font-weight:700;
+    background:var(--brand-gradient); -webkit-background-clip:text; background-clip:text; color:transparent;
+    line-height:1.5; flex-shrink:0;
+  }
+  .benefit-body b{ display:block; font-family:"Segoe UI Semibold","Segoe UI",system-ui,sans-serif; font-size:1.02rem; font-weight:600; color:var(--ink); margin-bottom:.3rem; }
+  .benefit-body span{ color:var(--ink-soft); font-size:.9rem; line-height:1.5; }
+
+  .pillars{ display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:1rem; margin-top:1.2rem; }
+  .pillar{ border-left:3px solid var(--accent); padding:.2rem 0 .2rem 1rem; }
+  .pillar b{ display:block; font-family:ui-monospace,"Cascadia Code",Consolas,monospace; font-size:.82rem; color:var(--ink); margin-bottom:.25rem; }
+  .pillar span{ font-size:.86rem; color:var(--ink-soft); }
+
+  .tbl-wrap{ overflow-x:auto; margin-top:1.2rem; }
+  table{ border-collapse:collapse; width:100%; font-size:.88rem; }
+  th,td{ text-align:left; padding:.6rem .9rem; border-bottom:1px solid var(--line-soft); }
+  th{ font-family:ui-monospace,"Cascadia Code",Consolas,monospace; font-size:.72rem; text-transform:uppercase; letter-spacing:.06em; color:var(--accent-ink); font-weight:600; }
+  td{ color:var(--ink-soft); }
+  td.k{ color:var(--ink); font-weight:600; }
+  tr:last-child td{ border-bottom:none; }
+
+  .callout{
+    background:var(--warn-soft); border:1px solid color-mix(in srgb, var(--warn) 40%, var(--line));
+    border-left:3px solid var(--warn); border-radius:8px; padding:1.1rem 1.3rem; margin-top:1.4rem;
+  }
+  .callout .eyebrow{ color:var(--warn); }
+  .callout p{ margin-top:.5rem; color:var(--ink); }
+
+  .example{
+    background:var(--accent-soft); border:1px solid color-mix(in srgb, var(--accent) 40%, var(--line));
+    border-left:3px solid var(--accent); border-radius:8px; padding:1.1rem 1.3rem; margin-top:1.4rem;
+  }
+  .example .eyebrow{ color:var(--accent); }
+  .example p{ margin-top:.6rem; color:var(--ink); }
+  .example p:first-of-type{ margin-top:.5rem; }
+
+  .gloss-link{
+    color:var(--accent-ink); text-decoration:underline dotted; text-decoration-color:var(--accent);
+    text-underline-offset:3px; cursor:help;
+  }
+  .gloss-link:hover{ background:var(--accent-soft); border-radius:2px; }
+  .term:target{ outline:2px solid var(--accent); outline-offset:-1px; border-radius:4px; box-shadow:var(--glow); }
+
+  footer{ border-top:1px solid var(--line); margin-top:1rem; padding:2.4rem 2rem 3rem; background:var(--bg-2); }
+  .footer-inner{
+    max-width:1180px; margin:0 auto; display:flex; justify-content:space-between; align-items:baseline;
+    gap:1rem; flex-wrap:wrap; font-family:ui-monospace,"Cascadia Code",Consolas,monospace; font-size:.76rem; color:var(--ink-faint);
+  }
+
+  @media (max-width:860px){
+    .layout{ grid-template-columns:1fr; }
+    nav.toc{ position:static; flex-direction:row; flex-wrap:wrap; gap:.5rem 1rem; }
+    nav.toc .group{ display:contents; }
+    .toc .group-label{ display:none; }
+    .toc ul{ flex-direction:row; flex-wrap:wrap; gap:.4rem; }
+    .toc a{ border-left:none; padding-left:0; border:1px solid var(--line); border-radius:20px; padding:.3rem .7rem; }
+  }
+  @media (prefers-reduced-motion: reduce){ *{ transition:none !important; } }
+</style>
+
+</head>
+<body>
+
+<div class="brand-strip"></div>
+<header class="masthead">
+  <div class="masthead-inner">
+    <div class="brand-mark" aria-hidden="true"></div>
+    <div class="eyebrow">FortiGate · Guide de référence FortiOS</div>
+    <h1>FortiGate — Guide des menus &amp; usages</h1>
+    <p class="lede">Guide théorique de référence sur l'interface FortiGate (FortiOS 7.4 / 7.6) : chaque grand menu expliqué, avec ses notions clés et des cas d'usage concrets — dashboard, réseau, policies, sécurité, VPN, identité, WiFi, Security Fabric, système et logs.</p>
+    <div class="fact-strip">
+      <div class="fact"><b>Type</b> Pare-feu nouvelle génération (NGFW)</div>
+      <div class="fact"><b>Éditeur</b> Fortinet</div>
+      <div class="fact"><b>OS</b> FortiOS 7.4 / 7.6</div>
+      <div class="fact"><b>Menus couverts</b> 10 + synthèse</div>
+      <div class="fact"><b>Glossaire</b> 75 termes</div>
+    </div>
+  </div>
+</header>
+<div class="layout">
+
+  <nav class="toc" aria-label="Sommaire">
+    <div class="group">
+      <div class="group-label">Introduction</div>
+      <ul><li><a href="#ch-intro">Comprendre le FortiGate</a></li></ul>
+    </div>
+    <div class="group">
+      <div class="group-label"><span class="domain-num">01</span> — Supervision</div>
+      <ul><li><a href="#ch-dashboard">Dashboard &amp; Monitors</a></li></ul>
+    </div>
+    <div class="group">
+      <div class="group-label"><span class="domain-num">02</span> — Structure &amp; sécurité</div>
+      <ul>
+        <li><a href="#ch-network">Network</a></li>
+        <li><a href="#ch-policy">Policy &amp; Objects</a></li>
+        <li><a href="#ch-secprofiles">Security Profiles</a></li>
+      </ul>
+    </div>
+    <div class="group">
+      <div class="group-label"><span class="domain-num">03</span> — Accès &amp; utilisateurs</div>
+      <ul>
+        <li><a href="#ch-vpn">VPN</a></li>
+        <li><a href="#ch-user">User &amp; Authentication</a></li>
+        <li><a href="#ch-wifi">WiFi &amp; Switch Controller</a></li>
+      </ul>
+    </div>
+    <div class="group">
+      <div class="group-label"><span class="domain-num">04</span> — Gestion &amp; supervision</div>
+      <ul>
+        <li><a href="#ch-fabric">Security Fabric &amp; avancé</a></li>
+        <li><a href="#ch-system">System</a></li>
+        <li><a href="#ch-log">Log &amp; Report</a></li>
+      </ul>
+    </div>
+    <div class="group">
+      <div class="group-label">Suite</div>
+      <ul>
+        <li><a href="#ch-revision">Révision &amp; cas pratique</a></li>
+        <li><a href="#ch-glossary">Glossaire</a></li>
+      </ul>
+    </div>
+  </nav>
+  <main>
+
+<section id="ch-intro">
+  <div class="section-head"><h2>Introduction — comprendre le FortiGate</h2></div>
+  <p class="lead-p">Le FortiGate est un pare-feu nouvelle génération (NGFW) de Fortinet : il ne se contente pas de filtrer des ports, il inspecte le trafic en profondeur (applications, contenu, menaces) tout en gérant le routage, le VPN, l'identité des utilisateurs et le WiFi. Ce document explique chaque grand menu de son interface (<span class="mono">GUI</span>), avec les notions à connaître et des cas d'usage concrets pour chacun.</p>
+  <p>Ce guide est théorique : il est pensé pour comprendre à quoi sert chaque menu et comment raisonner face à un scénario, sans nécessiter d'accès pratique au boîtier.</p>
+
+  <div class="pillars">
+    <div class="pillar"><b>Un firewall, plusieurs métiers</b><span>Filtrage réseau, VPN, contrôle applicatif, antivirus, authentification et supervision cohabitent dans le même boîtier.</span></div>
+    <div class="pillar"><b>GUI et CLI</b><span>Tout ce qui se fait dans le GUI a un équivalent en CLI (ligne de commande) ; le GUI reste la porte d'entrée la plus lisible pour apprendre.</span></div>
+    <div class="pillar"><b>FortiOS, un même OS partout</b><span>Du petit boîtier de succursale au firewall de datacenter, c'est le même système d'exploitation qui tourne, avec les mêmes menus.</span></div>
+  </div>
+
+  <div class="subsection"><h3 style="font-size:1.2rem;">Organisation d'un FortiGate</h3></div>
+  <p>Avant d'entrer dans les menus, quelques notions structurantes reviennent partout :</p>
+  <ul class="plain-list"><li><a href="#g-vdom" class="gloss-link">VDOM</a> — un FortiGate physique peut être découpé en plusieurs pare-feux virtuels indépendants, chacun avec ses propres politiques, interfaces et administrateurs.</li><li>Interfaces et zones — chaque port physique ou logique (<a href="#g-vlan" class="gloss-link">VLAN</a>, tunnel VPN...) reçoit un rôle ; les zones regroupent plusieurs interfaces pour simplifier l'écriture des règles.</li><li>Politique de pare-feu — la brique centrale : elle décide quel trafic est autorisé, entre quelles zones, avec quelle inspection de sécurité.</li><li><a href="#g-fortiguard" class="gloss-link">FortiGuard</a> — le service cloud qui alimente en continu les signatures antivirus, <a href="#g-ips" class="gloss-link">IPS</a>, catégories web et réputation, sans lesquelles les profils de sécurité seraient rapidement obsolètes.</li></ul>
+  <div class="callout"><div class="eyebrow">À retenir</div><p>Le réflexe pour comprendre n'importe quel menu FortiGate : se demander s'il configure la structure (interfaces, routage), la règle (policy), l'inspection (security profile), l'identité (utilisateur) ou la supervision (log/monitor).</p></div>
+</section>
+
+<section id="ch-dashboard">
+  <div class="section-head"><span class="domain-tag">Menu 01</span><h2>Dashboard &amp; Monitors</h2></div>
+  <p class="lead-p">Le tableau de bord est la première chose que l'on voit après connexion : une vue d'ensemble de l'état de santé et de l'activité du boîtier, avant même de toucher à une configuration.</p>
+
+  <div class="subsection"><h3 style="font-size:1.2rem;">Les dashboards</h3></div>
+  <ul class="plain-list"><li>Status — vue générale : CPU, mémoire, sessions actives, licences, informations système.</li><li>Security — menaces détectées récemment par les security profiles (antivirus, <a href="#g-ips" class="gloss-link">IPS</a>, web filter).</li><li>Network — état des interfaces, tables de routage statique/dynamique, moniteurs <a href="#g-ipsec" class="gloss-link">IPsec</a> et <a href="#g-sslvpn" class="gloss-link">SSL-VPN</a>.</li><li>Assets &amp;amp; Identities — inventaire des appareils et utilisateurs détectés sur le réseau.</li><li>WiFi — état des <a href="#g-fortiap" class="gloss-link">FortiAP</a> connectés et de leurs clients, si un contrôleur WiFi est actif.</li></ul>
+  <p>Chaque dashboard est composé de widgets déplaçables et configurables : on peut construire un tableau de bord sur mesure pour surveiller ce qui compte réellement pour un site donné.</p>
+
+  <div class="subsection"><h3 style="font-size:1.2rem;">FortiView</h3></div>
+  <p><a href="#g-fortiview" class="gloss-link">FortiView</a> regroupe des vues analytiques qui répondent à une question précise sur le trafic : quelles sont les sessions en cours, quelles applications consomment le plus de bande passante, quelles sources génèrent le plus de trafic, quels sites web sont les plus visités.</p>
+  <div class="example"><div class="eyebrow">Explication simple</div><p><a href="#g-fortiview" class="gloss-link">FortiView</a> croise les logs de trafic en temps réel ou sur une période choisie, pour transformer des lignes de logs en une vue lisible : tableau trié, graphique, carte.</p><div class="eyebrow" style="margin-top:.9rem">Cas d'usage</div><p>Un administrateur remarque un ralentissement réseau. Il ouvre <a href="#g-fortiview" class="gloss-link">FortiView</a> &amp;gt; Sources et trie par bande passante consommée : il identifie en quelques secondes le poste ou l'application responsable, sans avoir à fouiller les logs bruts.</p></div>
+  <div class="callout"><div class="eyebrow">À retenir</div><p>Le <a href="#g-dashboard" class="gloss-link">Dashboard</a> répond à « comment va le boîtier maintenant ? », <a href="#g-fortiview" class="gloss-link">FortiView</a> répond à « qui fait quoi sur le réseau ? ». Les deux sont des outils de lecture, pas de configuration.</p></div>
+</section>
+
+<section id="ch-network">
+  <div class="section-head"><span class="domain-tag">Menu 02</span><h2>Network</h2></div>
+  <p class="lead-p">Le menu Network définit la structure : comment le FortiGate se connecte physiquement et logiquement au reste du réseau, avant même de parler de règles de sécurité.</p>
+
+  <div class="subsection"><h3 style="font-size:1.2rem;">Interfaces</h3></div>
+  <ul class="plain-list"><li><a href="#g-interface" class="gloss-link">Interface</a> physique — un port RJ45/SFP auquel on attribue un rôle (LAN, WAN, DMZ) et un mode d'adressage (statique, <a href="#g-dhcp-fg" class="gloss-link">DHCP</a> client, PPPoE).</li><li><a href="#g-vlan" class="gloss-link">VLAN</a> — sous-interface qui segmente un port en plusieurs réseaux logiques isolés.</li><li><a href="#g-zone" class="gloss-link">Zone</a> — regroupement de plusieurs interfaces sous un même nom pour simplifier les policies.</li><li><a href="#g-aggregate" class="gloss-link">Aggregate</a> (LACP) — plusieurs ports physiques combinés en un seul lien logique, pour la bande passante et la redondance.</li><li><a href="#g-virtual-wire-pair" class="gloss-link">Virtual wire pair</a> — mode transparent qui insère le FortiGate dans un lien existant sans changer l'adressage IP, souvent utilisé pour un déploiement en coupure minimalement intrusif.</li></ul>
+  <div class="example"><div class="eyebrow">Explication simple</div><p>Une interface est le point d'entrée/sortie du trafic ; tout le reste (routage, policy, NAT) s'appuie sur les interfaces et zones définies ici.</p><div class="eyebrow" style="margin-top:.9rem">Cas d'usage</div><p>Un site a un seul port WAN mais trois réseaux internes (bureaux, WiFi invité, caméras). On crée trois <a href="#g-vlan" class="gloss-link">VLAN</a> sur le port LAN, chacun avec son propre sous-réseau, puis on les regroupe en zones pour écrire des policies distinctes plus lisibles.</p></div>
+
+  <div class="subsection"><h3 style="font-size:1.2rem;">Services réseau de base</h3></div>
+  <div class="cat-grid"><div class="cat-card"><h3><span class="svc-name"><a href="#g-dns-fg" class="gloss-link">DNS</a></span></h3><p class="cat-desc">Résolution de noms : le FortiGate peut relayer vers des serveurs externes ou agir lui-même comme serveur <a href="#g-dns-fg" class="gloss-link">DNS</a>.</p></div><div class="cat-card"><h3><span class="svc-name"><a href="#g-dhcp-fg" class="gloss-link">DHCP</a></span></h3><p class="cat-desc">Serveur ou relais <a href="#g-dhcp-fg" class="gloss-link">DHCP</a> pour attribuer automatiquement des adresses IP aux clients d'un <a href="#g-vlan" class="gloss-link">VLAN</a>.</p></div><div class="cat-card"><h3><span class="svc-name">Routage statique</span></h3><p class="cat-desc">Route configurée manuellement, indiquant la passerelle pour atteindre une destination.</p></div><div class="cat-card"><h3><span class="svc-name">Routage dynamique</span></h3><p class="cat-desc"><a href="#g-ospf" class="gloss-link">OSPF</a>, <a href="#g-bgp" class="gloss-link">BGP</a> ou RIP pour propager automatiquement les routes entre équipements.</p></div><div class="cat-card"><h3><span class="svc-name"><a href="#g-explicit-proxy" class="gloss-link">Proxy explicite</a> / transparent</span></h3><p class="cat-desc">Le client pointe volontairement vers le FortiGate comme proxy, ou le trafic est intercepté sans configuration côté client.</p></div><div class="cat-card"><h3><span class="svc-name"><a href="#g-sdwan" class="gloss-link">SD-WAN</a></span></h3><p class="cat-desc">Regroupe plusieurs liens WAN et choisit dynamiquement le meilleur chemin selon des règles de performance (SLA).</p></div></div>
+
+  <div class="subsection"><h3 style="font-size:1.2rem;">Notions avancées, en bref</h3></div>
+  <p>Ces sujets sont davantage rencontrés en environnement multi-sites ou opérateur, mais il est utile de savoir les situer :</p>
+  <div class="tbl-wrap"><table><thead><tr><th>Notion</th><th>En une phrase</th></tr></thead><tbody><tr><td class="k"><a href="#g-sdwan" class="gloss-link">SD-WAN</a></td><td>Utilise plusieurs liens WAN (Internet, MPLS, LTE) en simultané et bascule automatiquement selon la qualité mesurée par des sondes <a href="#g-performance-sla" class="gloss-link">Performance SLA</a>.</td></tr><tr><td class="k"><a href="#g-advpn" class="gloss-link">ADVPN</a></td><td>Extension d'<a href="#g-ipsec" class="gloss-link">IPsec</a> qui laisse deux sites spoke négocier un tunnel direct plutôt que de toujours transiter par le hub central.</td></tr><tr><td class="k"><a href="#g-ztna" class="gloss-link">ZTNA</a></td><td>Vérifie l'identité et la conformité de chaque appareil avant chaque accès applicatif, plutôt que de faire confiance à tout ce qui est déjà sur le réseau interne.</td></tr><tr><td class="k">VRF</td><td>Isole plusieurs tables de routage indépendantes sur un même FortiGate, comme des <a href="#g-vdom" class="gloss-link">VDOM</a> mais au niveau du routage uniquement.</td></tr></tbody></table></div>
+  <div class="callout"><div class="eyebrow">À retenir</div><p>Network répond toujours à une question de structure : par où le trafic entre et sort, et comment il trouve son chemin. La sécurité applicative (policies, profils) vient dans les menus suivants, une fois cette structure posée.</p></div>
+</section>
+
+<section id="ch-policy">
+  <div class="section-head"><span class="domain-tag">Menu 03</span><h2>Policy &amp; Objects</h2></div>
+  <p class="lead-p">C'est le cœur du métier FortiGate : la firewall policy décide, ligne par ligne, quel trafic est autorisé, entre quelles zones, avec quelle inspection. Tout le reste du boîtier existe pour nourrir ou appliquer ces règles.</p>
+
+  <div class="subsection"><h3 style="font-size:1.2rem;">Firewall policy</h3></div>
+  <p>Une policy combine toujours les mêmes ingrédients : une interface source, une interface destination, une ou plusieurs adresses source, une ou plusieurs adresses destination, un ou plusieurs services, une action (accept/deny), et éventuellement des security profiles et des règles de NAT.</p>
+  <div class="example"><div class="eyebrow">Explication simple</div><p>Les policies sont évaluées de haut en bas : la première règle qui correspond exactement au trafic s'applique, les suivantes sont ignorées pour cette session.</p><div class="eyebrow" style="margin-top:.9rem">Cas d'usage</div><p>Un service web interne doit être accessible depuis le LAN mais pas depuis le WiFi invité. On crée une policy LAN → DMZ autorisant le port 443 vers l'adresse du serveur, et on s'assure qu'aucune policy WiFi invité → DMZ n'existe : par défaut, tout ce qui n'est pas explicitement autorisé est bloqué.</p></div>
+  <div class="callout"><div class="eyebrow">À retenir</div><p>L'ordre des policies compte. Une règle trop large placée trop haut peut masquer des règles plus précises placées en dessous — c'est l'erreur de configuration la plus fréquente sur FortiGate.</p></div>
+
+  <div class="subsection"><h3 style="font-size:1.2rem;">Variantes de policy</h3></div>
+  <div class="tbl-wrap"><table><thead><tr><th>Type de policy</th><th>Rôle</th></tr></thead><tbody><tr><td class="k"><a href="#g-ngfw-policy" class="gloss-link">NGFW policy</a></td><td>Intègre directement l'inspection applicative (<a href="#g-appcontrol" class="gloss-link">Application Control</a>) dans la règle elle-même, plutôt que via un profil séparé.</td></tr><tr><td class="k"><a href="#g-local-in-policy" class="gloss-link">Local-in policy</a></td><td>Contrôle le trafic à destination du FortiGate lui-même (accès au <a href="#g-gui" class="gloss-link">GUI</a>, VPN), distinct du trafic qui ne fait que traverser.</td></tr><tr><td class="k"><a href="#g-dos-policy" class="gloss-link">DoS policy</a></td><td>Applique des seuils anti-déni de service (limite de connexions ou de paquets) sur une interface.</td></tr><tr><td class="k">Access control list</td><td>Filtrage simple, souvent utilisé en périphérie ou en environnement opérateur.</td></tr></tbody></table></div>
+
+  <div class="subsection"><h3 style="font-size:1.2rem;">Objets réutilisables</h3></div>
+  <ul class="plain-list"><li><a href="#g-address-object" class="gloss-link">Address object</a> — une IP, une plage, un sous-réseau ou un FQDN nommé, réutilisé dans plusieurs policies.</li><li><a href="#g-service-object" class="gloss-link">Service object</a> — un protocole et un port nommés (ex. HTTPS = TCP/443).</li><li><a href="#g-schedule" class="gloss-link">Schedule</a> — une plage horaire d'activation d'une policy (ex. accès Internet limité en dehors des heures de bureau).</li></ul>
+  <p>Nommer et réutiliser ces objets plutôt que de saisir des adresses brutes dans chaque règle est ce qui rend une configuration FortiGate lisible et maintenable sur la durée.</p>
+
+  <div class="subsection"><h3 style="font-size:1.2rem;">NAT : SNAT et DNAT</h3></div>
+  <div class="tbl-wrap"><table><thead><tr><th><a href="#g-snat" class="gloss-link">SNAT</a> (Source NAT)</th><th><a href="#g-dnat" class="gloss-link">DNAT</a> (Destination NAT)</th></tr></thead><tbody><tr><td class="k">Traduit l'adresse source du trafic sortant, généralement vers l'IP publique du FortiGate.</td><td>Redirige une IP/port publics vers une ressource interne, via un objet <a href="#g-vip" class="gloss-link">VIP</a>.</td></tr><tr><td class="k"><a href="#g-central-snat" class="gloss-link">Central SNAT</a> centralise les règles dans une table unique appliquée avant les policies.</td><td>Une <a href="#g-vip" class="gloss-link">VIP</a> peut rediriger un port spécifique (port forwarding) ou répartir la charge entre plusieurs serveurs internes.</td></tr></tbody></table></div>
+  <div class="example"><div class="eyebrow">Explication simple</div><p>Le <a href="#g-snat" class="gloss-link">SNAT</a> permet à un réseau privé de sortir sur Internet via une seule IP publique. Le <a href="#g-dnat" class="gloss-link">DNAT</a> fait l'inverse : il expose un service interne à l'extérieur sous une IP publique.</p><div class="eyebrow" style="margin-top:.9rem">Cas d'usage</div><p>Un serveur web interne en 10.0.0.10 doit être joignable depuis Internet. On crée une <a href="#g-vip" class="gloss-link">VIP</a> qui associe l'IP publique du FortiGate au port 443 vers 10.0.0.10:443, puis une policy WAN → LAN qui autorise ce trafic vers la <a href="#g-vip" class="gloss-link">VIP</a>.</p></div>
+</section>
+
+<section id="ch-secprofiles">
+  <div class="section-head"><span class="domain-tag">Menu 04</span><h2>Security Profiles</h2></div>
+  <p class="lead-p">Une firewall policy décide qui a le droit de passer. Les security profiles décident ce qu'on fait du contenu de ce trafic une fois qu'il est autorisé — c'est ce qui transforme un simple pare-feu en NGFW.</p>
+
+  <div class="cat-grid"><div class="cat-card"><h3><span class="svc-name"><a href="#g-antivirus" class="gloss-link">Antivirus</a></span></h3><p class="cat-desc">Inspecte les fichiers transitant dans le trafic pour détecter des malwares connus, souvent complété par une analyse sandbox pour les menaces inconnues.</p></div><div class="cat-card"><h3><span class="svc-name"><a href="#g-webfilter" class="gloss-link">Web Filter</a></span></h3><p class="cat-desc">Autorise, bloque ou avertit sur l'accès à des sites selon leur catégorie <a href="#g-fortiguard" class="gloss-link">FortiGuard</a> ou une liste explicite.</p></div><div class="cat-card"><h3><span class="svc-name"><a href="#g-appcontrol" class="gloss-link">Application Control</a></span></h3><p class="cat-desc">Identifie et contrôle des applications précises (réseaux sociaux, streaming, jeux) indépendamment du port réseau utilisé.</p></div><div class="cat-card"><h3><span class="svc-name"><a href="#g-ips" class="gloss-link">IPS</a></span></h3><p class="cat-desc">Détecte et bloque des signatures d'attaques connues (exploits, scans) dans le trafic réseau.</p></div><div class="cat-card"><h3><span class="svc-name"><a href="#g-dnsfilter" class="gloss-link">DNS Filter</a></span></h3><p class="cat-desc">Filtre les requêtes <a href="#g-dns-fg" class="gloss-link">DNS</a> par catégorie, bloquant la résolution d'un domaine avant même toute connexion.</p></div><div class="cat-card"><h3><span class="svc-name"><a href="#g-filefilter" class="gloss-link">File Filter</a></span></h3><p class="cat-desc">Bloque des transferts de fichiers selon leur type ou extension, indépendamment du contenu inspecté.</p></div></div>
+
+  <div class="subsection"><h3 style="font-size:1.2rem;">SSL Inspection : la condition souvent oubliée</h3></div>
+  <p>La grande majorité du trafic web actuel est chiffré (HTTPS). Sans déchiffrement, la plupart des security profiles ne voient qu'un flux chiffré illisible et ne peuvent pas vraiment inspecter le contenu.</p>
+  <div class="tbl-wrap"><table><thead><tr><th>Mode certificate</th><th>Mode deep inspection</th></tr></thead><tbody><tr><td class="k">Inspecte seulement le nom de domaine du certificat (SNI).</td><td>Déchiffre entièrement le trafic pour une inspection complète du contenu.</td></tr><tr><td class="k">Léger, peu d'impact, moins de faux positifs.</td><td>Nécessite de déployer un certificat FortiGate comme autorité de confiance sur les postes clients.</td></tr><tr><td class="k">Suffisant pour du filtrage web basé sur la catégorie du site.</td><td>Indispensable pour qu'<a href="#g-appcontrol" class="gloss-link">Application Control</a>, l'antivirus ou l'<a href="#g-ips" class="gloss-link">IPS</a> inspectent réellement le contenu HTTPS.</td></tr></tbody></table></div>
+  <div class="example"><div class="eyebrow">Explication simple</div><p>Sans <a href="#g-sslinspection" class="gloss-link">SSL Inspection</a> en mode deep, un antivirus ou un <a href="#g-ips" class="gloss-link">IPS</a> ne peut analyser que le trafic non chiffré : la majorité des menaces modernes, transportées en HTTPS, passeraient inaperçues.</p><div class="eyebrow" style="margin-top:.9rem">Cas d'usage</div><p>Une entreprise veut bloquer le téléchargement de fichiers infectés via des sites HTTPS. Il faut activer le profil <a href="#g-sslinspection" class="gloss-link">SSL Inspection</a> en mode deep sur la policy concernée, et déployer le certificat FortiGate sur les postes pour éviter les alertes de sécurité du navigateur.</p></div>
+  <div class="callout"><div class="eyebrow">À retenir</div><p>Un security profile n'agit que sur une policy à laquelle il est attaché : créer un profil ne suffit pas, il faut encore l'associer à la bonne règle de pare-feu pour qu'il s'applique.</p></div>
+</section>
+
+<section id="ch-vpn">
+  <div class="section-head"><span class="domain-tag">Menu 05</span><h2>VPN</h2></div>
+  <p class="lead-p">Deux familles de VPN cohabitent sur FortiGate, pour deux besoins différents : relier des sites entre eux (IPsec), ou donner un accès distant à des utilisateurs nomades (SSL-VPN).</p>
+
+  <div class="subsection"><h3 style="font-size:1.2rem;">IPsec — relier des sites</h3></div>
+  <ul class="plain-list"><li>Site-to-site — les deux extrémités du tunnel ont une IP publique fixe connue à l'avance ; typique entre un siège et une agence.</li><li>Dial-up — l'IP du pair distant n'est pas connue à l'avance ; utilisé pour des utilisateurs nomades ou de nombreux sites spoke se connectant à un hub.</li><li><a href="#g-advpn" class="gloss-link">ADVPN</a> — les sites spoke négocient automatiquement un tunnel direct entre eux plutôt que de toujours transiter par le hub, une fois le trafic identifié comme fréquent.</li><li><a href="#g-ike" class="gloss-link">IKE</a> — le protocole qui négocie et authentifie les paramètres du tunnel avant que le trafic chiffré ne circule.</li></ul>
+  <div class="example"><div class="eyebrow">Explication simple</div><p>Un tunnel <a href="#g-ipsec" class="gloss-link">IPsec</a> crée un chemin chiffré entre deux réseaux, comme si les deux sites étaient reliés par un câble privé.</p><div class="eyebrow" style="margin-top:.9rem">Cas d'usage</div><p>Une entreprise a un siège et trois agences. Elle configure un hub <a href="#g-ipsec" class="gloss-link">IPsec</a> au siège, et un tunnel dial-up depuis chaque agence vers le hub : chaque agence peut atteindre les ressources du siège, chiffrées de bout en bout, sans dépendre d'une IP fixe côté agence.</p></div>
+
+  <div class="subsection"><h3 style="font-size:1.2rem;">SSL-VPN — accès distant utilisateur</h3></div>
+  <div class="tbl-wrap"><table><thead><tr><th>Mode tunnel</th><th>Mode web</th></tr></thead><tbody><tr><td class="k">Nécessite un client (FortiClient) installé sur le poste.</td><td>Accessible depuis un simple navigateur, sans rien installer.</td></tr><tr><td class="k">Donne un accès réseau complet, comme si l'utilisateur était sur place.</td><td>Limité à des applications web ou des raccourcis prédéfinis (RDP, SSH, partages).</td></tr><tr><td class="k">Adapté au télétravail régulier avec un poste géré.</td><td>Adapté à un accès ponctuel depuis un poste non maîtrisé.</td></tr></tbody></table></div>
+  <div class="callout"><div class="eyebrow">À retenir</div><p><a href="#g-ipsec" class="gloss-link">IPsec</a> relie des réseaux entre eux (site-à-site) ; le <a href="#g-sslvpn" class="gloss-link">SSL-VPN</a> relie une personne à un réseau (accès distant). Les deux peuvent s'appuyer sur les mêmes objets d'authentification (utilisateurs, groupes, MFA).</p></div>
+</section>
+
+<section id="ch-user">
+  <div class="section-head"><span class="domain-tag">Menu 06</span><h2>User &amp; Authentication</h2></div>
+  <p class="lead-p">Ce menu répond à la question « qui accède, et comment le prouve-t-il ? ». Une fois l'identité vérifiée, elle peut être utilisée dans les firewall policies pour appliquer des règles selon l'utilisateur plutôt que seulement selon l'adresse IP.</p>
+
+  <div class="subsection"><h3 style="font-size:1.2rem;">Sources d'identité</h3></div>
+  <ul class="plain-list"><li><a href="#g-local-user" class="gloss-link">Utilisateur local</a> — compte créé directement sur le FortiGate, mot de passe stocké localement ; pratique pour un petit nombre de comptes.</li><li><a href="#g-ldap" class="gloss-link">LDAP</a> — le FortiGate interroge un annuaire existant (souvent Active Directory) pour authentifier sans dupliquer les comptes.</li><li><a href="#g-radius" class="gloss-link">RADIUS</a> — authentification centralisée via un serveur externe (NPS, FortiAuthenticator), qui peut aussi pousser des attributs (groupe, <a href="#g-vlan" class="gloss-link">VLAN</a>).</li><li><a href="#g-user-group" class="gloss-link">Groupe d'utilisateurs</a> — regroupement logique référencé directement dans les policies, pour appliquer une règle selon l'identité plutôt que l'adresse IP.</li></ul>
+  <div class="example"><div class="eyebrow">Explication simple</div><p>Une identité vérifiée peut devenir un critère de policy au même titre qu'une adresse IP : on peut autoriser un groupe précis à accéder à une ressource, indépendamment de l'endroit du réseau d'où il se connecte.</p><div class="eyebrow" style="margin-top:.9rem">Cas d'usage</div><p>Le service comptabilité doit accéder à une application financière sensible, mais pas le reste de l'entreprise. Plutôt que de filtrer par sous-réseau, on crée un groupe « Compta » synchronisé depuis <a href="#g-ldap" class="gloss-link">LDAP</a> et on l'utilise directement comme critère source dans la policy.</p></div>
+
+  <div class="subsection"><h3 style="font-size:1.2rem;">Renforcer l'authentification</h3></div>
+  <ul class="plain-list"><li><a href="#g-captive-portal" class="gloss-link">Portail captif</a> — page d'authentification affichée avant d'autoriser l'accès réseau, courante en WiFi invité.</li><li><a href="#g-mfa" class="gloss-link">MFA / FortiToken</a> — ajoute un second facteur (code à usage unique) en complément du mot de passe, réduisant le risque de compromission.</li></ul>
+  <div class="callout"><div class="eyebrow">À retenir</div><p>L'authentification répond à « qui êtes-vous ? », la firewall policy qui utilise ensuite ce groupe répond à « qu'avez-vous le droit de faire ? » — une distinction qui rappelle le couple authentification/autorisation que l'on retrouve dans beaucoup d'environnements IT.</p></div>
+</section>
+
+<section id="ch-wifi">
+  <div class="section-head"><span class="domain-tag">Menu 07</span><h2>WiFi &amp; Switch Controller</h2></div>
+  <p class="lead-p">Beaucoup de FortiGate agissent aussi comme contrôleur central pour les équipements WiFi et switch Fortinet, évitant une console de gestion séparée pour ces couches.</p>
+
+  <div class="cat-grid"><div class="cat-card"><h3><span class="svc-name"><a href="#g-fortiap" class="gloss-link">FortiAP</a></span></h3><p class="cat-desc">Point d'accès WiFi Fortinet, découvert et géré directement depuis le FortiGate une fois autorisé.</p></div><div class="cat-card"><h3><span class="svc-name"><a href="#g-ssid" class="gloss-link">SSID</a></span></h3><p class="cat-desc">Réseau WiFi diffusé, avec son propre chiffrement, <a href="#g-vlan" class="gloss-link">VLAN</a> de rattachement et politique d'accès.</p></div><div class="cat-card"><h3><span class="svc-name"><a href="#g-fortiswitch" class="gloss-link">FortiSwitch</a></span></h3><p class="cat-desc">Commutateur Fortinet géré depuis le FortiGate, avec attribution de <a href="#g-vlan" class="gloss-link">VLAN</a> par port centralisée.</p></div><div class="cat-card"><h3><span class="svc-name">Portail invité</span></h3><p class="cat-desc"><a href="#g-ssid" class="gloss-link">SSID</a> dédié avec portail captif, isolé sur son propre <a href="#g-vlan" class="gloss-link">VLAN</a> pour ne jamais toucher le réseau interne.</p></div></div>
+  <div class="example"><div class="eyebrow">Explication simple</div><p>Le FortiGate pousse la configuration (<a href="#g-ssid" class="gloss-link">SSID</a>, <a href="#g-vlan" class="gloss-link">VLAN</a>, sécurité) vers les <a href="#g-fortiap" class="gloss-link">FortiAP</a> et <a href="#g-fortiswitch" class="gloss-link">FortiSwitch</a> qu'il gère, comme il le ferait pour ses propres interfaces.</p><div class="eyebrow" style="margin-top:.9rem">Cas d'usage</div><p>Un bureau ajoute un réseau WiFi invité isolé. On crée un <a href="#g-ssid" class="gloss-link">SSID</a> dédié rattaché à un <a href="#g-vlan" class="gloss-link">VLAN</a> spécifique, on le limite par une firewall policy à l'accès Internet uniquement (pas d'accès au LAN interne), et on active un portail captif pour tracer les connexions.</p></div>
+  <div class="callout"><div class="eyebrow">À retenir</div><p>Cette centralisation n'est utile que si l'environnement utilise du matériel Fortinet (<a href="#g-fortiap" class="gloss-link">FortiAP</a>/<a href="#g-fortiswitch" class="gloss-link">FortiSwitch</a>) — avec d'autres marques, ce menu reste vide et la gestion se fait depuis leurs propres consoles.</p></div>
+</section>
+
+<section id="ch-fabric">
+  <div class="section-head"><span class="domain-tag">Menu 08</span><h2>Security Fabric &amp; notions avancées</h2></div>
+  <p class="lead-p">Un FortiGate isolé protège déjà un réseau. La Security Fabric consiste à le connecter aux autres produits Fortinet pour obtenir une visibilité et une automatisation à l'échelle de toute l'infrastructure.</p>
+
+  <div class="subsection"><h3 style="font-size:1.2rem;">Security Fabric</h3></div>
+  <ul class="plain-list"><li>Elle relie FortiGate, <a href="#g-fortianalyzer" class="gloss-link">FortiAnalyzer</a>, <a href="#g-fortiap" class="gloss-link">FortiAP</a>, <a href="#g-fortiswitch" class="gloss-link">FortiSwitch</a>, FortiClient et d'autres produits Fortinet dans une topologie partagée.</li><li>Elle permet de voir, depuis un seul FortiGate racine, l'ensemble des appareils du Fabric et leurs alertes.</li><li><a href="#g-security-rating" class="gloss-link">Security Rating</a> évalue automatiquement la configuration par rapport aux bonnes pratiques Fortinet et propose un score avec des recommandations concrètes.</li></ul>
+  <div class="example"><div class="eyebrow">Explication simple</div><p>La <a href="#g-security-fabric" class="gloss-link">Security Fabric</a> transforme des produits individuels en un système qui partage des informations de menace et peut réagir collectivement.</p><div class="eyebrow" style="margin-top:.9rem">Cas d'usage</div><p>Un FortiClient détecte un malware sur un poste. Grâce au Fabric, cette information peut déclencher automatiquement une mise en quarantaine réseau du poste par le FortiGate, sans intervention manuelle.</p></div>
+
+  <div class="subsection"><h3 style="font-size:1.2rem;">Automation Stitches</h3></div>
+  <p>Une <a href="#g-automation-stitch" class="gloss-link">Automation Stitch</a> associe un déclencheur (un événement, une alerte, un log précis) à une ou plusieurs actions automatiques : envoyer une notification, exécuter un script, changer une configuration, mettre en quarantaine un appareil.</p>
+  <div class="callout"><div class="eyebrow">Cas d'usage</div><p>Déclencheur : un compte administrateur échoue à se connecter 5 fois de suite. Action : envoi automatique d'un e-mail à l'équipe sécurité. Cela évite de devoir surveiller les logs manuellement pour détecter ce type d'événement.</p></div>
+
+  <div class="subsection"><h3 style="font-size:1.2rem;">API REST</h3></div>
+  <p>Le FortiGate expose une <a href="#g-rest-api" class="gloss-link">API REST</a> qui permet d'automatiser sa configuration et sa supervision depuis un script ou un outil tiers (inventaire, provisioning automatisé, intégration avec un SOC), plutôt que de tout faire manuellement via le <a href="#g-gui" class="gloss-link">GUI</a>.</p>
+
+  <div class="subsection"><h3 style="font-size:1.2rem;">VDOM, en détail</h3></div>
+  <p>Un Virtual Domain (<a href="#g-vdom" class="gloss-link">VDOM</a>) permet de faire fonctionner plusieurs pare-feux logiquement indépendants sur un seul boîtier physique, chacun avec ses propres interfaces, politiques et parfois ses propres administrateurs.</p>
+  <div class="tbl-wrap"><table><thead><tr><th>Sans <a href="#g-vdom" class="gloss-link">VDOM</a></th><th>Avec <a href="#g-vdom" class="gloss-link">VDOM</a></th></tr></thead><tbody><tr><td class="k">Une seule table de politiques pour tout le boîtier.</td><td>Une table de politiques distincte par <a href="#g-vdom" class="gloss-link">VDOM</a>.</td></tr><tr><td class="k">Simple à administrer pour un site unique.</td><td>Utile pour un hébergeur ou une entreprise qui isole plusieurs clients/filiales sur un même boîtier.</td></tr><tr><td class="k">Pas de séparation administrative possible.</td><td>Chaque <a href="#g-vdom" class="gloss-link">VDOM</a> peut avoir ses propres administrateurs, limités à leur périmètre.</td></tr></tbody></table></div>
+</section>
+
+<section id="ch-system">
+  <div class="section-head"><span class="domain-tag">Menu 09</span><h2>System</h2></div>
+  <p class="lead-p">Le menu System regroupe tout ce qui concerne l'administration du boîtier lui-même, plutôt que le trafic qui le traverse.</p>
+
+  <div class="subsection"><h3 style="font-size:1.2rem;">Administrateurs et accès</h3></div>
+  <ul class="plain-list"><li>Chaque compte administrateur a un profil d'accès qui définit précisément ce qu'il peut voir et modifier.</li><li>Un hôte de confiance (trusted host) restreint les adresses IP autorisées à se connecter avec un compte donné, réduisant la surface d'attaque du management.</li><li><a href="#g-feature-visibility" class="gloss-link">Feature Visibility</a> affiche ou masque des menus entiers selon les fonctionnalités réellement utilisées, pour garder une interface plus simple.</li></ul>
+
+  <div class="subsection"><h3 style="font-size:1.2rem;">Haute disponibilité (HA)</h3></div>
+  <p>Le FGCP (FortiGate Clustering Protocol) regroupe deux boîtiers ou plus en cluster pour assurer la continuité de service si l'un tombe en panne.</p>
+  <div class="tbl-wrap"><table><thead><tr><th>Actif-Passif</th><th>Actif-Actif</th></tr></thead><tbody><tr><td class="k">Un seul boîtier traite le trafic à la fois ; le second prend le relais en cas de panne.</td><td>Les deux boîtiers traitent le trafic simultanément, avec répartition de charge.</td></tr><tr><td class="k">Configuration la plus courante et la plus simple à raisonner.</td><td>Utile quand la capacité de traitement d'un seul boîtier ne suffit plus.</td></tr></tbody></table></div>
+  <div class="example"><div class="eyebrow">Explication simple</div><p>En <a href="#g-ha" class="gloss-link">HA</a>, la configuration est synchronisée automatiquement entre les membres du cluster : modifier une policy sur l'un la propage sur l'autre.</p><div class="eyebrow" style="margin-top:.9rem">Cas d'usage</div><p>Un site critique ne peut pas tolérer de coupure réseau. Deux FortiGate identiques sont montés en cluster actif-passif : si le boîtier actif tombe en panne matérielle, le second prend le relais en quelques secondes, sans intervention manuelle.</p></div>
+
+  <div class="subsection"><h3 style="font-size:1.2rem;">Maintenance courante</h3></div>
+  <ul class="plain-list"><li><a href="#g-firmware" class="gloss-link">Firmware</a> — mise à jour de la version de <a href="#g-fortios" class="gloss-link">FortiOS</a>, à planifier en tenant compte des notes de version et de la compatibilité <a href="#g-ha" class="gloss-link">HA</a>.</li><li>Certificats — gestion des certificats utilisés pour le <a href="#g-gui" class="gloss-link">GUI</a>, le <a href="#g-sslvpn" class="gloss-link">SSL-VPN</a> ou la <a href="#g-sslinspection" class="gloss-link">SSL Inspection</a>.</li><li>SNMP — permet une supervision de l'état du boîtier par un outil de monitoring tiers.</li><li><a href="#g-backup-restore" class="gloss-link">Backup / Restore</a> — sauvegarde et restauration du fichier de configuration, essentielle avant tout changement important.</li></ul>
+  <div class="callout"><div class="eyebrow">À retenir</div><p>Toujours sauvegarder la configuration avant une mise à jour de firmware ou un changement de structure important (<a href="#g-vdom" class="gloss-link">VDOM</a>, <a href="#g-ha" class="gloss-link">HA</a>) : c'est le filet de sécurité le plus simple et le plus souvent oublié.</p></div>
+</section>
+
+<section id="ch-log">
+  <div class="section-head"><span class="domain-tag">Menu 10</span><h2>Log &amp; Report</h2></div>
+  <p class="lead-p">Toute décision prise par le FortiGate — trafic autorisé, menace bloquée, connexion VPN — peut être journalisée. Ce menu permet de consulter ces traces et d'en tirer des rapports.</p>
+
+  <div class="subsection"><h3 style="font-size:1.2rem;">Où stocker les logs ?</h3></div>
+  <div class="tbl-wrap"><table><thead><tr><th>Stockage local</th><th><a href="#g-fortianalyzer" class="gloss-link">FortiAnalyzer</a></th></tr></thead><tbody><tr><td class="k">Disque du FortiGate lui-même, capacité limitée.</td><td>Solution centralisée dédiée, pour un ou plusieurs FortiGate.</td></tr><tr><td class="k">Suffisant pour un petit site ou une rétention courte.</td><td>Nécessaire pour une rétention longue, de la corrélation ou des rapports poussés.</td></tr></tbody></table></div>
+
+  <div class="subsection"><h3 style="font-size:1.2rem;">Types de logs</h3></div>
+  <ul class="plain-list"><li><a href="#g-traffic-log" class="gloss-link">Traffic log</a> — chaque session traitée par les firewall policies, avec la règle qui l'a autorisée ou bloquée.</li><li>Logs de sécurité — événements générés par les security profiles (menace antivirus détectée, site bloqué par le web filter, signature <a href="#g-ips" class="gloss-link">IPS</a> déclenchée).</li><li>Logs système — événements d'administration, de <a href="#g-ha" class="gloss-link">HA</a>, de mise à jour.</li></ul>
+  <div class="example"><div class="eyebrow">Explication simple</div><p>Le traffic log est souvent le premier réflexe de diagnostic : il montre exactement quelle policy a traité une connexion, et pourquoi elle a été acceptée ou refusée.</p><div class="eyebrow" style="margin-top:.9rem">Cas d'usage</div><p>Un utilisateur signale ne plus accéder à une application interne. On filtre le traffic log sur son adresse IP et le port concerné : le log montre une session bloquée par une policy précise, ce qui confirme immédiatement l'origine du problème.</p></div>
+
+  <div class="subsection"><h3 style="font-size:1.2rem;">Outils de diagnostic</h3></div>
+  <ul class="plain-list"><li><a href="#g-packet-capture" class="gloss-link">Packet capture</a> — enregistre les paquets bruts transitant sur une interface, pour une analyse fine d'un problème réseau.</li><li><a href="#g-debug-flow" class="gloss-link">Debug flow</a> (<a href="#g-cli" class="gloss-link">CLI</a>) — trace en temps réel le traitement d'un paquet à travers le routage, le NAT et les policies, très utile pour comprendre pourquoi un trafic est bloqué de façon inattendue.</li></ul>
+  <div class="callout"><div class="eyebrow">À retenir</div><p><a href="#g-log" class="gloss-link">Log</a> &amp; Report répond après coup à « que s'est-il passé ? », alors que <a href="#g-fortiview" class="gloss-link">FortiView</a> (dans <a href="#g-dashboard" class="gloss-link">Dashboard</a> &amp; Monitors) répond en temps réel à « que se passe-t-il maintenant ? ». Les deux s'appuient sur les mêmes données de trafic.</p></div>
+</section>
+
+<section id="ch-revision">
+  <div class="section-head"><span class="domain-tag">Synthèse</span><h2>Révision et cas pratique transverse</h2></div>
+  <p class="lead-p">Ce dernier chapitre ne présente plus de nouveau menu ; il relie les briques entre elles sur un scénario complet, et propose une méthode pour raisonner face à n'importe quel besoin.</p>
+
+  <div class="subsection"><h3 style="font-size:1.2rem;">Méthode pour aborder un scénario FortiGate</h3></div>
+  <ul class="plain-list"><li>1. Structure — quelles interfaces, zones et routes sont concernées ?</li><li>2. Règle — quelle firewall policy doit exister, avec quelle source, destination et service ?</li><li>3. Inspection — quels security profiles doivent être attachés à cette policy (antivirus, web filter, <a href="#g-ips" class="gloss-link">IPS</a>...) ?</li><li>4. Identité — le trafic doit-il être limité à des utilisateurs ou groupes précis ?</li><li>5. Preuve — comment vérifier que ça fonctionne (traffic log, <a href="#g-fortiview" class="gloss-link">FortiView</a>, packet capture) ?</li></ul>
+  <div class="callout"><div class="eyebrow">À retenir</div><p>Ces cinq questions, dans cet ordre, permettent de retomber sur ses pieds face à n'importe quel scénario FortiGate : structure, règle, inspection, identité, preuve.</p></div>
+
+  <div class="subsection"><h3 style="font-size:1.2rem;">Mini-cas de synthèse</h3></div>
+  <p>Cas fil rouge : une PME avec un siège et une agence, un accès télétravail, et un WiFi invité.</p>
+  <div class="tbl-wrap"><table><thead><tr><th>Besoin</th><th>Réponse FortiGate</th></tr></thead><tbody><tr><td class="k">Relier le siège et l'agence en permanence</td><td>Tunnel <a href="#g-ipsec" class="gloss-link">IPsec</a> site-to-site entre les deux FortiGate.</td></tr><tr><td class="k">Permettre le télétravail depuis des postes personnels</td><td><a href="#g-sslvpn" class="gloss-link">SSL-VPN</a> en mode web pour un accès applicatif limité, ou mode tunnel pour les postes gérés par l'entreprise.</td></tr><tr><td class="k">Isoler le WiFi invité du réseau interne</td><td><a href="#g-ssid" class="gloss-link">SSID</a> dédié sur un <a href="#g-vlan" class="gloss-link">VLAN</a> séparé, avec portail captif et policy limitée à l'accès Internet uniquement.</td></tr><tr><td class="k">Bloquer les menaces dans le trafic web</td><td>Security profiles (<a href="#g-antivirus" class="gloss-link">Antivirus</a>, <a href="#g-webfilter" class="gloss-link">Web Filter</a>, <a href="#g-ips" class="gloss-link">IPS</a>, <a href="#g-appcontrol" class="gloss-link">Application Control</a>) attachés aux policies concernées, avec <a href="#g-sslinspection" class="gloss-link">SSL Inspection</a> en mode deep.</td></tr><tr><td class="k">Limiter l'accès à l'application financière</td><td><a href="#g-user-group" class="gloss-link">Groupe d'utilisateurs</a> synchronisé via <a href="#g-ldap" class="gloss-link">LDAP</a>, utilisé comme critère source dans une policy dédiée.</td></tr><tr><td class="k">Garder une trace en cas d'incident</td><td>Envoi des logs vers <a href="#g-fortianalyzer" class="gloss-link">FortiAnalyzer</a> et consultation du traffic log en cas de doute.</td></tr></tbody></table></div>
+  <div class="example"><div class="eyebrow">Explication simple</div><p>Aucune de ces briques ne fonctionne isolément : une policy sans security profile laisse passer du contenu non inspecté ; un security profile sans <a href="#g-sslinspection" class="gloss-link">SSL Inspection</a> ne voit rien du trafic HTTPS ; un groupe d'utilisateurs non référencé dans une policy n'a aucun effet.</p><div class="eyebrow" style="margin-top:.9rem">Cas d'usage</div><p>Sur ce mini-cas, l'ordre logique de configuration serait : d'abord les interfaces et <a href="#g-vlan" class="gloss-link">VLAN</a> (structure), puis les tunnels VPN, puis les policies avec leurs objets, puis l'attachement des security profiles, et enfin la vérification via les logs.</p></div>
+
+  <div class="subsection"><h3 style="font-size:1.2rem;">Pour continuer</h3></div>
+  <ul class="plain-list"><li>Reliez toujours un menu à la question à laquelle il répond, plutôt que de le mémoriser isolément.</li><li>Le <a href="#g-gui" class="gloss-link">GUI</a> et le <a href="#g-cli" class="gloss-link">CLI</a> décrivent la même configuration : consulter l'équivalent <a href="#g-cli" class="gloss-link">CLI</a> d'une action <a href="#g-gui" class="gloss-link">GUI</a> aide à mieux comprendre ce qui se passe réellement.</li><li>La documentation officielle Fortinet (docs.fortinet.com) reste la référence à jour pour toute version précise de <a href="#g-fortios" class="gloss-link">FortiOS</a>.</li></ul>
+</section>
+
+<section id="ch-glossary">
+  <div class="section-head"><h2>Glossaire</h2></div>
+  <p class="lead-p">Les 75 termes techniques du document, classés par ordre alphabétique. Chaque occurrence de ces termes dans le corps du texte est un lien qui renvoie directement ici.</p>
+  <div class="glossary">
+        <div class="term" id="g-address-object"><dt>Address object</dt><dd>Objet nommé représentant une IP, une plage, un sous-réseau ou un FQDN, réutilisable dans les policies.</dd></div>
+        <div class="term" id="g-administrator"><dt>Administrateur</dt><dd>Compte disposant d'un profil d'accès (permissions) pour se connecter et gérer le FortiGate, avec des restrictions possibles par hôte de confiance.</dd></div>
+        <div class="term" id="g-advpn"><dt>ADVPN</dt><dd>Auto-Discovery VPN : extension d'<a href="#g-ipsec" class="gloss-link">IPsec</a> qui permet à deux sites spoke de négocier automatiquement un tunnel direct plutôt que de passer par le hub.</dd></div>
+        <div class="term" id="g-aggregate"><dt>Aggregate</dt><dd>Regroupement de plusieurs interfaces physiques en un seul lien logique (LACP), pour la bande passante et la redondance.</dd></div>
+        <div class="term" id="g-antivirus"><dt>Antivirus</dt><dd>Profil qui inspecte les fichiers transitant dans le trafic pour détecter des malwares connus, souvent complété par l'analyse sandbox.</dd></div>
+        <div class="term" id="g-rest-api"><dt>API REST</dt><dd><a href="#g-interface" class="gloss-link">Interface</a> de programmation qui permet d'automatiser la configuration et la supervision du FortiGate depuis un script ou un outil externe.</dd></div>
+        <div class="term" id="g-appcontrol"><dt>Application Control</dt><dd>Profil qui identifie et contrôle des applications spécifiques (réseaux sociaux, streaming, jeux) indépendamment du port utilisé.</dd></div>
+        <div class="term" id="g-automation-stitch"><dt>Automation Stitch</dt><dd>Règle qui associe un déclencheur (événement, log, alerte) à une ou plusieurs actions automatiques (notification, script, changement de config).</dd></div>
+        <div class="term" id="g-backup-restore"><dt>Backup / Restore</dt><dd>Sauvegarde et restauration du fichier de configuration du FortiGate (au format texte ou chiffré).</dd></div>
+        <div class="term" id="g-bgp"><dt>BGP</dt><dd>Protocole de routage dynamique utilisé entre systèmes autonomes, très employé pour le <a href="#g-sdwan" class="gloss-link">SD-WAN</a> et les connexions multi-opérateurs.</dd></div>
+        <div class="term" id="g-central-snat"><dt>Central SNAT</dt><dd>Table unique et centralisée de règles <a href="#g-snat" class="gloss-link">SNAT</a>, appliquée avant les policies de pare-feu plutôt que dans chaque règle individuellement.</dd></div>
+        <div class="term" id="g-cli"><dt>CLI</dt><dd><a href="#g-interface" class="gloss-link">Interface</a> en ligne de commande du FortiGate, accessible via SSH, console série ou le widget CLI Console dans le <a href="#g-gui" class="gloss-link">GUI</a>.</dd></div>
+        <div class="term" id="g-dashboard"><dt>Dashboard</dt><dd>Page d'accueil du <a href="#g-gui" class="gloss-link">GUI</a>, composée de widgets configurables donnant une vue d'ensemble de l'état du boîtier.</dd></div>
+        <div class="term" id="g-debug-flow"><dt>Debug flow</dt><dd>Outil <a href="#g-cli" class="gloss-link">CLI</a> qui trace en temps réel le traitement d'un paquet à travers les différentes étapes internes du FortiGate (routage, NAT, policy).</dd></div>
+        <div class="term" id="g-dhcp-fg"><dt>DHCP</dt><dd>Service qui attribue automatiquement une adresse IP aux clients d'un réseau ; le FortiGate peut être serveur DHCP ou relais vers un serveur externe.</dd></div>
+        <div class="term" id="g-dnat"><dt>DNAT</dt><dd>Destination NAT : redirige une IP/port publics vers une ressource interne, typiquement via un objet <a href="#g-vip" class="gloss-link">VIP</a>.</dd></div>
+        <div class="term" id="g-dns-fg"><dt>DNS</dt><dd>Service de résolution de noms ; le FortiGate peut agir comme serveur DNS, relais, ou forwarder conditionnel.</dd></div>
+        <div class="term" id="g-dnsfilter"><dt>DNS Filter</dt><dd>Profil qui filtre les requêtes <a href="#g-dns-fg" class="gloss-link">DNS</a> par catégorie, bloquant la résolution de domaines indésirables avant même la connexion.</dd></div>
+        <div class="term" id="g-dos-policy"><dt>DoS policy</dt><dd>Règle qui applique des seuils anti-déni de service (limitation de connexions/paquets) sur une interface.</dd></div>
+        <div class="term" id="g-feature-visibility"><dt>Feature Visibility</dt><dd>Paramètre qui affiche ou masque des menus entiers du <a href="#g-gui" class="gloss-link">GUI</a> selon les fonctionnalités réellement utilisées, pour simplifier l'interface.</dd></div>
+        <div class="term" id="g-filefilter"><dt>File Filter</dt><dd>Profil qui bloque des transferts de fichiers selon leur type ou leur extension, indépendamment du contenu.</dd></div>
+        <div class="term" id="g-firewall-policy"><dt>Firewall policy</dt><dd>Règle qui autorise ou bloque un trafic entre deux zones/interfaces, selon la source, la destination, le service et l'heure — le cœur de la configuration FortiGate.</dd></div>
+        <div class="term" id="g-firmware"><dt>Firmware</dt><dd>La version installée de <a href="#g-fortios" class="gloss-link">FortiOS</a> sur le boîtier ; sa mise à jour corrige des failles et ajoute des fonctionnalités.</dd></div>
+        <div class="term" id="g-fortianalyzer"><dt>FortiAnalyzer</dt><dd>Solution centralisée de collecte de logs et de reporting pour un ou plusieurs FortiGate.</dd></div>
+        <div class="term" id="g-fortiap"><dt>FortiAP</dt><dd>Point d'accès WiFi Fortinet, géré directement depuis le FortiGate (contrôleur WiFi intégré).</dd></div>
+        <div class="term" id="g-forticare"><dt>FortiCare</dt><dd>Compte Fortinet utilisé pour enregistrer un boîtier, gérer les licences et accéder au support.</dd></div>
+        <div class="term" id="g-fortiguard"><dt>FortiGuard</dt><dd>Service cloud de Fortinet qui fournit les signatures et catégories utilisées par les security profiles (antivirus, <a href="#g-ips" class="gloss-link">IPS</a>, web filtering...), mis à jour en continu.</dd></div>
+        <div class="term" id="g-fortimanager"><dt>FortiManager</dt><dd>Solution centralisée de gestion de configuration pour administrer plusieurs FortiGate depuis une seule console.</dd></div>
+        <div class="term" id="g-fortios"><dt>FortiOS</dt><dd>Le système d'exploitation qui fait tourner tous les FortiGate — c'est lui qui définit les menus, les commandes <a href="#g-cli" class="gloss-link">CLI</a> et les fonctionnalités disponibles.</dd></div>
+        <div class="term" id="g-fortiswitch"><dt>FortiSwitch</dt><dd>Commutateur Fortinet, géré directement depuis le FortiGate (contrôleur switch intégré) pour une administration centralisée.</dd></div>
+        <div class="term" id="g-fortiview"><dt>FortiView</dt><dd>Ensemble de vues analytiques en temps réel et historiques : sessions, applications, menaces, sources/destinations les plus actives.</dd></div>
+        <div class="term" id="g-user-group"><dt>Groupe d'utilisateurs</dt><dd>Regroupement logique d'utilisateurs (locaux ou distants) référencé dans les policies pour appliquer des règles selon l'identité.</dd></div>
+        <div class="term" id="g-gui"><dt>GUI</dt><dd><a href="#g-interface" class="gloss-link">Interface</a> graphique web du FortiGate, accessible via un navigateur (HTTPS sur le port de management).</dd></div>
+        <div class="term" id="g-ha"><dt>HA</dt><dd>High Availability : regroupement de deux FortiGate ou plus en cluster (FGCP) pour assurer la continuité de service en cas de panne d'un boîtier.</dd></div>
+        <div class="term" id="g-trusted-host"><dt>Hôte de confiance</dt><dd>Adresse IP ou plage depuis laquelle un compte administrateur est autorisé à se connecter, pour limiter la surface d'attaque du management.</dd></div>
+        <div class="term" id="g-ike"><dt>IKE</dt><dd>Internet Key Exchange : protocole qui négocie et authentifie les paramètres de sécurité d'un tunnel <a href="#g-ipsec" class="gloss-link">IPsec</a>.</dd></div>
+        <div class="term" id="g-interface"><dt>Interface</dt><dd>Port physique ou logique du FortiGate (LAN, WAN, <a href="#g-vlan" class="gloss-link">VLAN</a>, tunnel...) auquel on attribue une adresse IP et un rôle.</dd></div>
+        <div class="term" id="g-ips"><dt>IPS</dt><dd>Intrusion Prevention System : profil qui détecte et bloque des signatures d'attaques connues dans le trafic réseau.</dd></div>
+        <div class="term" id="g-ipsec"><dt>IPsec</dt><dd>Protocole de VPN standard utilisé pour chiffrer des tunnels site-à-site ou dial-up entre le FortiGate et un autre équipement.</dd></div>
+        <div class="term" id="g-ldap"><dt>LDAP</dt><dd>Protocole d'annuaire (souvent Active Directory) utilisé par le FortiGate pour authentifier des utilisateurs existants sans les recréer localement.</dd></div>
+        <div class="term" id="g-local-in-policy"><dt>Local-in policy</dt><dd>Règle qui contrôle le trafic à destination du FortiGate lui-même (management, VPN), distincte des policies de trafic traversant.</dd></div>
+        <div class="term" id="g-log"><dt>Log</dt><dd>Enregistrement d'un événement (trafic, sécurité, système) horodaté, stocké localement ou envoyé vers <a href="#g-fortianalyzer" class="gloss-link">FortiAnalyzer</a>.</dd></div>
+        <div class="term" id="g-mfa"><dt>MFA / FortiToken</dt><dd>Authentification à plusieurs facteurs ; FortiToken est l'application ou le jeton matériel Fortinet qui génère le code à usage unique.</dd></div>
+        <div class="term" id="g-ngfw-policy"><dt>NGFW policy</dt><dd>Mode de politique où l'inspection applicative (<a href="#g-appcontrol" class="gloss-link">Application Control</a>) est directement intégrée à la règle de pare-feu, plutôt qu'associée séparément.</dd></div>
+        <div class="term" id="g-ospf"><dt>OSPF</dt><dd>Protocole de routage dynamique à état de liens, utilisé pour propager automatiquement les routes au sein d'un réseau interne.</dd></div>
+        <div class="term" id="g-packet-capture"><dt>Packet capture</dt><dd>Outil de diagnostic qui enregistre les paquets bruts transitant sur une interface, pour analyser un problème réseau en détail.</dd></div>
+        <div class="term" id="g-performance-sla"><dt>Performance SLA</dt><dd>Sonde <a href="#g-sdwan" class="gloss-link">SD-WAN</a> qui mesure en continu la latence, la gigue et la perte de paquets d'un lien pour décider s'il respecte le seuil de qualité défini.</dd></div>
+        <div class="term" id="g-policy-route"><dt>Policy route</dt><dd>Route qui dirige le trafic selon des critères (source, port, interface entrante) plutôt que selon la seule destination.</dd></div>
+        <div class="term" id="g-captive-portal"><dt>Portail captif</dt><dd>Page d'authentification affichée automatiquement avant d'autoriser l'accès réseau, courante en WiFi invité.</dd></div>
+        <div class="term" id="g-explicit-proxy"><dt>Proxy explicite</dt><dd>Mode où le client est configuré pour envoyer son trafic web volontairement vers le FortiGate en tant que proxy.</dd></div>
+        <div class="term" id="g-transparent-proxy"><dt>Proxy transparent</dt><dd>Mode où le FortiGate intercepte le trafic web sans configuration côté client.</dd></div>
+        <div class="term" id="g-radius"><dt>RADIUS</dt><dd>Protocole d'authentification centralisée, souvent utilisé avec un serveur NPS ou FortiAuthenticator pour valider les identifiants et pousser des attributs.</dd></div>
+        <div class="term" id="g-report"><dt>Rapport</dt><dd>Document généré automatiquement à partir des logs, résumant l'activité réseau ou de sécurité sur une période donnée.</dd></div>
+        <div class="term" id="g-static-route"><dt>Route statique</dt><dd>Route de réseau configurée manuellement, indiquant la passerelle à utiliser pour atteindre une destination donnée.</dd></div>
+        <div class="term" id="g-schedule"><dt>Schedule</dt><dd>Objet définissant une plage horaire pendant laquelle une policy est active.</dd></div>
+        <div class="term" id="g-sdwan"><dt>SD-WAN</dt><dd>Fonctionnalité qui regroupe plusieurs liens WAN (Internet, MPLS, LTE) et choisit dynamiquement le meilleur chemin selon des règles de performance.</dd></div>
+        <div class="term" id="g-security-fabric"><dt>Security Fabric</dt><dd>Architecture qui connecte plusieurs produits Fortinet (FortiGate, <a href="#g-fortianalyzer" class="gloss-link">FortiAnalyzer</a>, <a href="#g-fortiap" class="gloss-link">FortiAP</a>, <a href="#g-fortiswitch" class="gloss-link">FortiSwitch</a>, FortiClient...) pour partager visibilité et automatisation.</dd></div>
+        <div class="term" id="g-security-profile"><dt>Security profile</dt><dd>Profil d'inspection (antivirus, web filter, <a href="#g-ips" class="gloss-link">IPS</a>...) attaché à une firewall policy pour inspecter le contenu du trafic autorisé.</dd></div>
+        <div class="term" id="g-security-rating"><dt>Security Rating</dt><dd>Évaluation automatique de la configuration du FortiGate par rapport aux bonnes pratiques Fortinet, avec un score et des recommandations.</dd></div>
+        <div class="term" id="g-service-object"><dt>Service object</dt><dd>Objet nommé représentant un protocole et un port (ex. HTTPS = TCP/443), réutilisable dans les policies.</dd></div>
+        <div class="term" id="g-snat"><dt>SNAT</dt><dd>Source NAT : traduit l'adresse IP source du trafic sortant, généralement vers l'IP publique du FortiGate.</dd></div>
+        <div class="term" id="g-ssid"><dt>SSID</dt><dd>Nom du réseau WiFi diffusé, configuré avec son propre chiffrement, <a href="#g-vlan" class="gloss-link">VLAN</a> et politique d'accès.</dd></div>
+        <div class="term" id="g-sslinspection"><dt>SSL Inspection</dt><dd>Déchiffrement du trafic HTTPS pour permettre aux profils de sécurité d'inspecter son contenu, en mode certificate (léger) ou deep (complet).</dd></div>
+        <div class="term" id="g-sslvpn"><dt>SSL-VPN</dt><dd>VPN d'accès distant basé sur SSL/TLS, utilisable en mode tunnel (client complet) ou web (portail navigateur).</dd></div>
+        <div class="term" id="g-traffic-log"><dt>Traffic log</dt><dd>Journal qui enregistre chaque session ou connexion traitée par les firewall policies, avec la policy qui l'a autorisée ou bloquée.</dd></div>
+        <div class="term" id="g-local-user"><dt>Utilisateur local</dt><dd>Compte défini directement sur le FortiGate, avec mot de passe stocké localement.</dd></div>
+        <div class="term" id="g-vdom"><dt>VDOM</dt><dd>Virtual Domain : partition logique d'un FortiGate physique en plusieurs firewalls virtuels indépendants, chacun avec ses propres politiques et interfaces.</dd></div>
+        <div class="term" id="g-vip"><dt>VIP</dt><dd>Virtual IP : objet qui associe une adresse publique à une adresse interne, avec ou sans redirection de port, pour exposer un service interne.</dd></div>
+        <div class="term" id="g-virtual-wire-pair"><dt>Virtual wire pair</dt><dd>Association de deux interfaces en mode transparent (bump-in-the-wire), sans routage, pour insérer le FortiGate sans changer l'adressage existant.</dd></div>
+        <div class="term" id="g-vlan"><dt>VLAN</dt><dd>Sous-interface qui segmente un port physique en plusieurs réseaux logiques isolés, identifiés par un tag 802.1Q.</dd></div>
+        <div class="term" id="g-dialup-vpn"><dt>VPN dial-up</dt><dd>Configuration <a href="#g-ipsec" class="gloss-link">IPsec</a> où l'adresse IP du pair distant n'est pas connue à l'avance (utilisateurs nomades, sites multiples).</dd></div>
+        <div class="term" id="g-webfilter"><dt>Web Filter</dt><dd>Profil qui autorise, bloque ou avertit sur l'accès à des sites selon leur catégorie ou une liste explicite.</dd></div>
+        <div class="term" id="g-widget"><dt>Widget</dt><dd>Petit module d'information ajouté à un dashboard (CPU, licences, top menaces, etc.).</dd></div>
+        <div class="term" id="g-zone"><dt>Zone</dt><dd>Regroupement de plusieurs interfaces sous un même nom, pour simplifier l'écriture des politiques de pare-feu.</dd></div>
+        <div class="term" id="g-ztna"><dt>ZTNA</dt><dd>Zero Trust Network Access : modèle d'accès qui vérifie l'identité et l'état de conformité de chaque appareil avant chaque connexion à une application, plutôt que de faire confiance au réseau.</dd></div>
+  </div>
+</section>
+  </main>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <span>FortiGate — Guide des menus &amp; usages</span>
+    <span>Document théorique de référence, réalisé pour l'étude individuelle</span>
+  </div>
+</footer>
+</body>
+</html>
